@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kiasi Salumu Dolivin — Portfolio</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #e9e2d5;
+            color: #292722;
+        }
+
+        /* =====================================================
+           PAGE D'ACCUEIL
+        ===================================================== */
+
+        #entry-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #e9e2d5;
+            color: #292722;
+
+            transition:
+                opacity 0.8s ease,
+                visibility 0.8s ease;
+        }
+
+        #entry-screen::before {
+            content: "";
+
+            position: absolute;
+            inset: 24px;
+
+            border: 1px solid rgba(41, 39, 34, 0.18);
+
+            pointer-events: none;
+        }
+
+        #entry-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* =====================================================
+           CONTENU
+        ===================================================== */
+
+        .entry-content {
+            position: relative;
+
+            width: min(1100px, 86vw);
+            min-height: 65vh;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .entry-name {
+            font-weight: 600;
+        }
+
+        .entry-year {
+            opacity: 0.5;
+        }
+
+        /* =====================================================
+           CENTRE
+        ===================================================== */
+
+        .entry-main {
+            display: grid;
+
+            grid-template-columns:
+                minmax(20px, 0.5fr)
+                minmax(300px, 2fr)
+                minmax(20px, 0.5fr);
+
+            align-items: center;
+            gap: 30px;
+        }
+
+        .vertical-line {
+            width: 1px;
+            height: 150px;
+
+            background: rgba(41, 39, 34, 0.25);
+
+            justify-self: center;
+        }
+
+        .entry-title-block {
+            text-align: left;
+        }
+
+        .entry-overline {
+            margin-bottom: 18px;
+
+            font-size: 12px;
+            letter-spacing: 4px;
+
+            opacity: 0.5;
+        }
+
+        .entry-title {
+            margin: 0;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size:
+                clamp(48px, 8vw, 100px);
+
+            line-height: 0.9;
+            font-weight: 400;
+
+            letter-spacing: -4px;
+        }
+
+        .entry-description {
+            max-width: 500px;
+
+            margin-top: 28px;
+
+            font-size: 14px;
+            line-height: 1.8;
+
+            color: rgba(41, 39, 34, 0.68);
+        }
+
+        /* =====================================================
+           TEXTE LATÉRAL
+        ===================================================== */
+
+        .entry-side {
+            writing-mode: vertical-rl;
+
+            font-size: 10px;
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            opacity: 0.4;
+
+            justify-self: center;
+        }
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .entry-footer {
+            display: flex;
+
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .entry-fields {
+            display: flex;
+
+            gap: 25px;
+
+            font-size: 10px;
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+
+            opacity: 0.45;
+        }
+
+        /* =====================================================
+           BOUTON ENTER
+        ===================================================== */
+
+        .enter-button {
+            display: flex;
+
+            align-items: center;
+            gap: 12px;
+
+            border: none;
+            background: transparent;
+
+            color: #292722;
+
+            padding: 10px 0;
+
+            font-size: 13px;
+            letter-spacing: 3px;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.3s ease,
+                opacity 0.3s ease;
+        }
+
+        .enter-arrow {
+            font-size: 22px;
+            line-height: 0;
+
+            transition:
+                transform 0.3s ease;
+        }
+
+        .enter-button:hover {
+            transform: translateX(5px);
+        }
+
+        .enter-button:hover .enter-arrow {
+            transform: translateX(7px);
+        }
+
+        /* =====================================================
+           ÉCRAN MUSIQUE
+        ===================================================== */
+
+        #music-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 900;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #e9e2d5;
+            color: #292722;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity 0.7s ease,
+                visibility 0.7s ease;
+        }
+
+        #music-screen.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .music-content {
+            width: min(600px, 86vw);
+
+            text-align: center;
+        }
+
+        .music-number {
+            margin-bottom: 25px;
+
+            font-size: 10px;
+            letter-spacing: 4px;
+
+            opacity: 0.4;
+        }
+
+        .music-content h2 {
+            margin: 0;
+
+            font-family:
+                Georgia,
+                "Times New Roman",
+                serif;
+
+            font-size:
+                clamp(32px, 6vw, 58px);
+
+            font-weight: 400;
+        }
+
+        .music-content p {
+            margin-top: 20px;
+
+            font-size: 13px;
+            line-height: 1.7;
+
+            opacity: 0.55;
+        }
+
+        .music-buttons {
+            display: flex;
+
+            justify-content: center;
+            gap: 30px;
+
+            margin-top: 45px;
+        }
+
+        .music-button {
+            border: none;
+
+            border-bottom: 1px solid
+                rgba(41, 39, 34, 0.4);
+
+            background: transparent;
+
+            color: #292722;
+
+            padding: 8px 4px;
+
+            font-size: 11px;
+            letter-spacing: 3px;
+
+            cursor: pointer;
+
+            transition:
+                border-color 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .music-button:hover {
+            border-color: #292722;
+            transform: translateY(-2px);
+        }
+
+        /* =====================================================
+           PORTFOLIO 3D
+        ===================================================== */
+
+        #portfolio {
+            position: fixed;
+            inset: 0;
+
+            z-index: 1;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity 1s ease,
+                visibility 1s ease;
+
+            pointer-events: none;
+        }
+
+        #portfolio.visible {
+            opacity: 1;
+            visibility: visible;
+
+            pointer-events: auto;
+        }
+
+        /* =====================================================
+           CANVAS THREE.JS
+        ===================================================== */
+
+        #portfolio canvas {
+            position: absolute;
+
+            inset: 0;
+
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            pointer-events: auto;
+
+            touch-action: none;
+        }
+
+        /* =====================================================
+           TABLETTE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            #entry-screen::before {
+                inset: 16px;
+            }
+
+            .entry-content {
+                width: 82vw;
+            }
+
+            .entry-main {
+                grid-template-columns:
+                    25px
+                    1fr
+                    25px;
+            }
+
+            .entry-title {
+                font-size:
+                    clamp(50px, 11vw, 80px);
+            }
+
+            .entry-description {
+                font-size: 13px;
+            }
+
+            .entry-fields {
+                gap: 15px;
+            }
+        }
+
+        /* =====================================================
+           TELEPHONE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            #entry-screen::before {
+                inset: 12px;
+            }
+
+            .entry-content {
+                width: 78vw;
+                min-height: 72vh;
+            }
+
+            .entry-header {
+                font-size: 9px;
+                letter-spacing: 1.5px;
+            }
+
+            .entry-main {
+                display: block;
+            }
+
+            .vertical-line {
+                display: none;
+            }
+
+            .entry-side {
+                display: none;
+            }
+
+            .entry-title-block {
+                text-align: left;
+            }
+
+            .entry-overline {
+                font-size: 10px;
+                letter-spacing: 3px;
+            }
+
+            .entry-title {
+                font-size:
+                    clamp(46px, 15vw, 70px);
+
+                letter-spacing: -2px;
+            }
+
+            .entry-description {
+                max-width: 320px;
+
+                margin-top: 22px;
+
+                font-size: 12px;
+                line-height: 1.7;
+            }
+
+            .entry-footer {
+                align-items: center;
+            }
+
+            .entry-fields {
+                display: none;
+            }
+
+            .enter-button {
+                font-size: 11px;
+                letter-spacing: 2px;
+            }
+
+            .music-content {
+                width: 82vw;
+            }
+
+            .music-number {
+                font-size: 9px;
+            }
+
+            .music-content h2 {
+                font-size: 34px;
+            }
+
+            .music-content p {
+                font-size: 12px;
+            }
+
+            .music-buttons {
+                gap: 25px;
+            }
+        }
+
+        /* =====================================================
+           PETIT TÉLÉPHONE
+        ===================================================== */
+
+        @media (max-width: 380px) {
+
+            .entry-title {
+                font-size: 42px;
+            }
+
+            .entry-description {
+                font-size: 11px;
+            }
+
+            .entry-content {
+                min-height: 75vh;
+            }
+
+            .music-buttons {
+                gap: 20px;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/portfolio-3d/assets/index-3Zaj6lbH.js"></script>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         PAGE D'ACCUEIL
+    ===================================================== -->
+
+    <section id="entry-screen">
+
+        <div class="entry-content">
+
+            <header class="entry-header">
+
+                <span class="entry-name">
+                    Kiasi Salumu Dolivin
+                </span>
+
+                <span class="entry-year">
+                    2026
+                </span>
+
+            </header>
+
+
+            <main class="entry-main">
+
+                <div class="vertical-line"></div>
+
+                <div class="entry-title-block">
+
+                    <div class="entry-overline">
+                        3D Digital Portfolio
+                    </div>
+
+                    <h1 class="entry-title">
+                        Welcome.
+                    </h1>
+
+                    <p class="entry-description">
+                        Software, robotics, artificial intelligence
+                        and creative work — presented through a
+                        space designed and built in 3D.
+                    </p>
+
+                </div>
+
+                <div class="entry-side">
+                    Explore — Create — Build
+                </div>
+
+            </main>
+
+
+            <footer class="entry-footer">
+
+                <div class="entry-fields">
+
+                    <span>Software</span>
+                    <span>Robotics</span>
+                    <span>AI</span>
+                    <span>Art</span>
+
+                </div>
+
+
+                <button
+                    id="enter-button"
+                    class="enter-button"
+                    type="button"
+                >
+                    ENTER
+
+                    <span class="enter-arrow">
+                        →
+                    </span>
+                </button>
+
+            </footer>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CHOIX MUSIQUE
+    ===================================================== -->
+
+    <section id="music-screen">
+
+        <div class="music-content">
+
+            <div class="music-number">
+                BEFORE ENTERING
+            </div>
+
+            <h2>
+                A little music?
+            </h2>
+
+            <p>
+                Would you like some music while
+                exploring the portfolio?
+            </p>
+
+            <div class="music-buttons">
+
+                <button
+                    id="music-yes"
+                    class="music-button"
+                    type="button"
+                >
+                    YES
+                </button>
+
+                <button
+                    id="music-no"
+                    class="music-button"
+                    type="button"
+                >
+                    NO
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PORTFOLIO 3D
+    ===================================================== -->
+
+    <main id="portfolio"></main>
+
+
+    <!-- =====================================================
+         THREE.JS
+    ===================================================== -->
+
+
+
+    <!-- =====================================================
+         NAVIGATION DES ÉCRANS
+    ===================================================== -->
+<script>
+
+    const entryScreen =
+        document.getElementById(
+            "entry-screen"
+        );
+
+    const musicScreen =
+        document.getElementById(
+            "music-screen"
+        );
+
+    const portfolio =
+        document.getElementById(
+            "portfolio"
+        );
+
+    const enterButton =
+        document.getElementById(
+            "enter-button"
+        );
+
+    const musicYes =
+        document.getElementById(
+            "music-yes"
+        );
+
+    const musicNo =
+        document.getElementById(
+            "music-no"
+        );
+
+    const portfolioMusic =
+    new Audio(
+        "./music/portfolio.mp3"
+    );
+
+    portfolioMusic.loop = true;
+
+    portfolioMusic.volume = 0.35;
+
+
+    /* =====================================================
+       ENTER
+    ===================================================== */
+
+    enterButton.addEventListener(
+        "click",
+        () => {
+
+            entryScreen.classList.add(
+                "hidden"
+            );
+
+            setTimeout(() => {
+
+                musicScreen.classList.add(
+                    "visible"
+                );
+
+            }, 500);
+
+        }
+    );
+
+
+    /* =====================================================
+       MUSIQUE — YES
+    ===================================================== */
+
+    musicYes.addEventListener(
+        "click",
+        () => {
+
+            startPortfolio(true);
+
+        }
+    );
+
+
+    /* =====================================================
+       MUSIQUE — NO
+    ===================================================== */
+
+    musicNo.addEventListener(
+        "click",
+        () => {
+
+            startPortfolio(false);
+
+        }
+    );
+
+
+    /* =====================================================
+       ENTRER DANS LE PORTFOLIO
+    ===================================================== */
+
+    function startPortfolio(withMusic) {
+
+        musicScreen.classList.remove(
+            "visible"
+        );
+
+        setTimeout(() => {
+
+            portfolio.classList.add(
+                "visible"
+            );
+
+        }, 150);
+
+
+        if (withMusic) {
+
+            portfolioMusic.play()
+                .catch(
+                    (error) => {
+
+                        console.warn(
+                            "La musique n'a pas pu démarrer :",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+
+    }
+
+</script>
