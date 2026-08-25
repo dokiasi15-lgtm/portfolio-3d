@@ -1173,12 +1173,10 @@ window.addEventListener(
 // =====================================================
 
 const loader =
-    new GLTFLoader();
+new GLTFLoader();
 
 loader.load(
-
-    '/models/portfolio_room.glb',
-
+    `${import.meta.env.BASE_URL}models/portfolio_room.glb`,
     (gltf) => {
 
         console.log(
@@ -1555,52 +1553,52 @@ loader.load(
 
         createNavigationUI();
 
-        console.log(
-            'Portfolio prêt.'
-        );
+      console.log(
+    'Portfolio prêt.'
+);
+
+console.log(
+    'ABOUT ME interactif activé.'
+);
+
+},
+
+// =================================================
+// PROGRESSION
+// =================================================
+
+(progress) => {
+
+    if (
+        progress.total > 0
+    ) {
+
+        const percent =
+            (
+                progress.loaded /
+                progress.total
+            ) * 100;
 
         console.log(
-            'ABOUT ME interactif activé.'
-        );
-
-    },
-
-    // =================================================
-    // PROGRESSION
-    // =================================================
-
-    (progress) => {
-
-        if (
-            progress.total > 0
-        ) {
-
-            const percent =
-                (
-                    progress.loaded /
-                    progress.total
-                ) * 100;
-
-            console.log(
-                `Chargement : ${percent.toFixed(0)}%`
-            );
-
-        }
-
-    },
-
-    // =================================================
-    // ERREUR
-    // =================================================
-
-    (error) => {
-
-        console.error(
-            'Erreur lors du chargement du modèle :',
-            error
+            `Chargement : ${percent.toFixed(0)}%`
         );
 
     }
+
+},
+
+// =================================================
+// ERREUR
+// =================================================
+
+(error) => {
+
+    console.error(
+        'Erreur lors du chargement du modèle :',
+        error
+    );
+
+}
 
 );
 
