@@ -1424,18 +1424,11 @@ loader.load(
                     maxSize * 20
                 );
 
-            camera.position.set(
-
-                center.x +
-                maxSize * 0.85,
-
-                center.y +
-                maxSize * 0.55,
-
-                center.z +
-                maxSize * 1.15
-
-            );
+            // The room opens toward negative Z; frame its front on all screens.
+            const halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+            const fitDistance = Math.max(size.y / 2, size.x / (2 * camera.aspect)) / Math.tan(halfFov);
+            camera.position.set(center.x, center.y + size.y * 0.16,
+                box.min.z - fitDistance * 1.12);
 
             camera.lookAt(
                 center
@@ -1505,10 +1498,11 @@ loader.load(
             new THREE.Vector3();
 
         const box =
-            new THREE.Box3()
-                .setFromObject(
-                    room
-                );
+            new THREE.Box3();
+        room.traverse(object => {
+            const name = (object.name || '').toUpperCase();
+            if (object.isMesh && !name.startsWith('HIT_') && !name.startsWith('INTERACTIVE_')) box.expandByObject(object);
+        });
 
         box.getCenter(
             target
