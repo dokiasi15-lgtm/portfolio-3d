@@ -832,3 +832,17 @@
     }
 
 </script>
+<script>
+(() => {
+ const status=document.createElement('div');
+ status.setAttribute('role','status');
+ status.style.cssText='position:fixed;left:50%;top:22px;transform:translateX(-50%);z-index:99999;background:#121710;color:#eff2e8;padding:14px 20px;border:1px solid #788564;border-radius:12px;font:13px/1.6 system-ui;max-width:85vw;text-align:center';
+ status.textContent='Chargement de l’espace 3D…';
+ document.body.append(status);
+ const back=document.createElement('a');back.href='https://dokiasi15-lgtm.github.io/portfolio-dolivin/?v=10#projects';back.textContent='← Retour au portfolio';back.style.cssText='position:fixed;right:16px;top:16px;z-index:99998;background:#121710;color:#c4f567;padding:10px 14px;border-radius:20px;font:12px system-ui;text-decoration:none';document.body.append(back);
+ const started=Date.now(); const timer=setInterval(()=>{
+  if(document.getElementById('navigation-ui')){status.remove();clearInterval(timer);}
+  else if(Date.now()-started>20000){status.textContent='Chargement du modèle 3D… Cela peut prendre un moment selon la connexion.';}
+ },500);
+})();
+</script>
