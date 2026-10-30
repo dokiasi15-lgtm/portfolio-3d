@@ -254,6 +254,19 @@ function createNavigationUI() {
             <button data-move="backward" aria-label="Reculer">↓</button>
             <button data-move="right" aria-label="Aller à droite">→</button>
         </div>
+        <button class="guide-toggle" type="button" aria-expanded="false" aria-controls="interaction-guide">Guide des interactions</button>
+        <section id="interaction-guide" class="guide-panel" hidden aria-label="Guide des interactions">
+            <button class="guide-close" type="button">Fermer</button>
+            <h2>Comment explorer</h2>
+            <ul>
+                <li>Faites glisser la souris ou le doigt pour regarder autour de vous.</li>
+                <li>Avancez avec ZQSD, WASD, les flèches ou le pavé de déplacement.</li>
+                <li>Cliquez sur ABOUT, PROJECT ou CONTACT dans la pièce pour ouvrir les informations.</li>
+                <li>Cliquez sur l’écran pour parcourir les dessins, puis sur un dessin pour l’ouvrir en grand.</li>
+                <li>Cliquez sur la guitare pour regarder « La lettre de Snow ».</li>
+                <li>Cliquez sur les logos sociaux pour ouvrir les profils GitHub et X.</li>
+            </ul>
+        </section>
     `;
 
     document.body.appendChild(ui);
@@ -274,9 +287,35 @@ function createNavigationUI() {
         .navigation-pad button[data-move="backward"] { grid-column: 2; grid-row: 2; }
         .navigation-pad button[data-move="right"] { grid-column: 3; grid-row: 2; }
         @media (max-width: 900px) { #navigation-ui { right: 16px; bottom: 16px; } .desktop-hint { display: none; } .touch-hint { display: inline; } .navigation-pad { grid-template-columns: repeat(3, 46px); } .navigation-pad button { width: 46px; height: 46px; } }
+        .guide-toggle { position: fixed; left: 22px; bottom: 20px; width: auto; height: auto; padding: 11px 15px; border: 1px solid rgba(255,255,255,.48); background: rgba(27,23,18,.62); color: #fff; font: 12px Arial,sans-serif; letter-spacing: .4px; pointer-events: auto; cursor: pointer; backdrop-filter: blur(8px); }
+        .guide-toggle:hover,.guide-close:hover { background: rgba(233,226,213,.35); }
+        .guide-panel { position: fixed; left: 22px; bottom: 70px; width: min(420px, calc(100vw - 32px)); max-height: 70vh; overflow: auto; padding: 28px; background: #e9e2d5; color: #292722; text-align: left; text-shadow: none; letter-spacing: 0; box-shadow: 0 15px 55px rgba(0,0,0,.35); pointer-events: auto; }
+        .guide-panel h2 { margin: 0 0 12px; font: 26px Georgia,serif; }
+        .guide-panel ul { margin: 0; padding-left: 20px; font: 13px/1.65 Arial,sans-serif; }
+        .guide-panel li { margin: 8px 0; }
+        .guide-close { float: right; border: 1px solid rgba(41,39,34,.25); background: transparent; color: #292722; padding: 5px 9px; cursor: pointer; }
+        .gallery-art { display: block; width: 100%; max-height: 54vh; object-fit: contain; background: #f2ede1; }
+        .gallery-controls { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 18px; }
+        .gallery-controls button { border: 1px solid rgba(41,39,34,.28); background: transparent; color: #292722; padding: 9px 16px; cursor: pointer; }
+        .animation-preview { width: 100%; max-height: 58vh; background: #111; }
+        .info-content a { color: #705c2e; text-decoration: underline; text-underline-offset: 3px; }
     `;
 
     document.head.appendChild(style);
+
+    const guideToggle = ui.querySelector('.guide-toggle');
+    const guidePanel = ui.querySelector('#interaction-guide');
+    const guideClose = ui.querySelector('.guide-close');
+    guideToggle?.addEventListener('click', () => {
+        const willOpen = guidePanel.hidden;
+        guidePanel.hidden = !willOpen;
+        guideToggle.setAttribute('aria-expanded', String(willOpen));
+    });
+    guideClose?.addEventListener('click', () => {
+        guidePanel.hidden = true;
+        guideToggle.setAttribute('aria-expanded', 'false');
+        guideToggle.focus();
+    });
 
     ui.querySelectorAll('[data-move]').forEach(
         (button) => {
@@ -407,9 +446,9 @@ function createAboutMePanel() {
             </h1>
 
             <p class="about-intro">
-                Étudiant en ingénierie électromécanique,
-                avec un fort intérêt pour la robotique,
-                l'informatique et les technologies créatives.
+                Étudiant en électromécanique, développeur junior,
+                CEO & fondateur d’IMO_PUSH. J’explore aussi la
+                robotique et les technologies créatives.
             </p>
 
             <!-- =========================================
@@ -447,6 +486,8 @@ function createAboutMePanel() {
                     <span>
                         Guitare
                     </span>
+
+                    <span>Pixel art — débutant</span>
 
                     <span>
                         Cinéma
@@ -519,6 +560,9 @@ function createAboutMePanel() {
                     <span>
                         Three.js
                     </span>
+
+                    <span>React Native</span>
+                    <span>Rust</span>
 
                     <span>
                         Robotique
@@ -1124,6 +1168,8 @@ function openInfoPanel(title, content) {
 
 function closeInfoPanel() {
 
+    document.querySelector('#info-panel video')?.pause();
+
     document.getElementById('info-panel')
         ?.classList.remove('active');
 
@@ -1133,7 +1179,7 @@ function openProjects() {
 
     openInfoPanel(
         'PROJECTS',
-        `<h1>Projects</h1><p>Une sélection de projets sera présentée ici.</p><ul><li>Portfolio 3D — Three.js & Blender</li><li>Robotique et électromécanique</li><li>Développement logiciel</li></ul>`
+        `<h1>Projects</h1><p>CEO & fondateur d’IMO_PUSH. Voici les projets et pages déjà disponibles :</p><ul><li><a href="https://imo-push-staging.pages.dev" target="_blank" rel="noopener noreferrer">IMO_PUSH — ouvrir la préversion ↗</a></li><li><a href="https://dokiasi15-lgtm.github.io/imo-push-command-center-demo/" target="_blank" rel="noopener noreferrer">IMO_PUSH — démo Command Center ↗</a></li><li><a href="https://github.com/dokiasi15-lgtm/IMO_MUSIC" target="_blank" rel="noopener noreferrer">IMO_MUSIC — dépôt ↗</a></li><li><a href="https://dokiasi15-lgtm.github.io/portfolio-3d/" target="_blank" rel="noopener noreferrer">Portfolio 3D ↗</a></li><li><a href="https://x.com/KiasiJohn61874" target="_blank" rel="noopener noreferrer">Pages et prochaines créations sur X ↗</a></li></ul>`
     );
 
 }
@@ -1142,9 +1188,79 @@ function openContact() {
 
     openInfoPanel(
         'CONTACT',
-        `<h1>Contact</h1><p>Les coordonnées et liens professionnels seront ajoutés ici. En attendant, les icônes sociales du décor restent la base prévue pour cette section.</p>`
+        `<h1>Contact</h1><ul><li><a href="mailto:dokiasi15@gmail.com">Email · dokiasi15@gmail.com ↗</a></li><li><a href="https://wa.me/243893905133" target="_blank" rel="noopener noreferrer">WhatsApp ↗</a></li><li><a href="https://github.com/dokiasi15-lgtm" target="_blank" rel="noopener noreferrer">GitHub ↗</a></li><li><a href="https://x.com/KiasiJohn61874" target="_blank" rel="noopener noreferrer">X ↗</a></li></ul>`
     );
 
+}
+
+const portfolioArtworks = [
+    { file: 'IMG-20260924-WA0073.jpeg', label: 'Portrait dessiné · 01' },
+    { file: 'IMG-20260914-WA0035.jpeg', label: 'Portrait dessiné · 02' },
+    { file: 'IMG_20260719_122318_856.jpg', label: 'Portrait dessiné · 03' },
+    { file: 'IMG_20260403_140844_999.jpg', label: 'Portrait dessiné · 04' }
+];
+
+let activeArtwork = 0;
+let monitorSlideshowStarted = false;
+let monitorTexture = null;
+
+function artworkUrl(index) {
+    return `${import.meta.env.BASE_URL}art/${portfolioArtworks[index].file}`;
+}
+
+function paintMonitorArtwork(canvas, index) {
+    const context = canvas.getContext('2d');
+    if (!context) return;
+    context.fillStyle = '#f2ede1';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = '#282722';
+    context.font = 'bold 26px Arial';
+    context.fillText('DOLIVIN / DRAWINGS', 32, 45);
+    context.fillStyle = '#6a665e';
+    context.font = '16px Arial';
+    context.fillText('CLICK TO EXPLORE  ·  ' + String(index + 1).padStart(2, '0') + ' / 04', 32, 72);
+    const image = new Image();
+    image.onload = () => {
+        if (index !== activeArtwork) return;
+        context.fillStyle = '#f2ede1';
+        context.fillRect(0, 88, canvas.width, canvas.height - 88);
+        const pad = 30;
+        const maxW = canvas.width - pad * 2;
+        const maxH = canvas.height - 108;
+        const scale = Math.min(maxW / image.width, maxH / image.height);
+        const w = image.width * scale;
+        const h = image.height * scale;
+        context.drawImage(image, (canvas.width - w) / 2, 88 + (maxH - h) / 2, w, h);
+        if (monitorTexture) monitorTexture.needsUpdate = true;
+    };
+    image.src = artworkUrl(index);
+}
+
+function updateMonitorArtwork() {
+    if (!room) return;
+    const screen = room.getObjectByName('Plane.005');
+    if (!screen?.material?.map?.image) return;
+    paintMonitorArtwork(screen.material.map.image, activeArtwork);
+    screen.material.map.needsUpdate = true;
+}
+
+function openArtworkGallery(startAt = activeArtwork) {
+    activeArtwork = (startAt + portfolioArtworks.length) % portfolioArtworks.length;
+    const render = () => {
+        const artwork = portfolioArtworks[activeArtwork];
+        openInfoPanel('DESSINS / DRAWINGS', `<h1>${artwork.label}</h1><div class="gallery-controls"><button type="button" id="art-prev" aria-label="Dessin précédent">←</button><span>${activeArtwork + 1} / ${portfolioArtworks.length}</span><button type="button" id="art-next" aria-label="Dessin suivant">→</button></div><a href="${artworkUrl(activeArtwork)}" target="_blank" rel="noopener noreferrer"><img class="gallery-art" src="${artworkUrl(activeArtwork)}" alt="${artwork.label} de Kiasi Salumu Dolivin — ouvrir l’image complète"></a><p>Faites défiler les dessins avec les flèches. Cliquez sur l’image pour l’ouvrir en grand.</p>`);
+        document.querySelector('#art-prev')?.addEventListener('click', () => { activeArtwork = (activeArtwork + portfolioArtworks.length - 1) % portfolioArtworks.length; updateMonitorArtwork(); render(); });
+        document.querySelector('#art-next')?.addEventListener('click', () => { activeArtwork = (activeArtwork + 1) % portfolioArtworks.length; updateMonitorArtwork(); render(); });
+    };
+    render();
+}
+
+function openAnimation() {
+    openInfoPanel('ANIMATION', `<h1>La lettre de Snow</h1><p>Mon dernier court-métrage animé · création originale en 3D.</p><video class="animation-preview" controls autoplay playsinline preload="metadata"><source src="${import.meta.env.BASE_URL}animation/La_lettre_de_Snow_2min.mp4" type="video/mp4">La lecture vidéo n’est pas prise en charge par ce navigateur.</video>`);
+}
+
+function openSocialLinks() {
+    openInfoPanel('SOCIAL / CODE', `<h1>Retrouvons-nous.</h1><p>Ces liens sont disponibles :</p><ul><li><a href="https://github.com/dokiasi15-lgtm" target="_blank" rel="noopener noreferrer">GitHub · projets et code ↗</a></li><li><a href="https://x.com/KiasiJohn61874" target="_blank" rel="noopener noreferrer">X · actualités et prochaines pages ↗</a></li></ul>`);
 }
 
 // =====================================================
@@ -1193,6 +1309,27 @@ loader.load(
         scene.add(
             room
         );
+
+        const monitorScreen = room.getObjectByName('Plane.005');
+        if (monitorScreen?.isMesh) {
+            const screenCanvas = document.createElement('canvas');
+            screenCanvas.width = 900;
+            screenCanvas.height = 680;
+            monitorTexture = new THREE.CanvasTexture(screenCanvas);
+            monitorTexture.colorSpace = THREE.SRGBColorSpace;
+            monitorScreen.material = monitorScreen.material.clone();
+            monitorScreen.material.map = monitorTexture;
+            monitorScreen.material.color.set(0xffffff);
+            monitorScreen.material.needsUpdate = true;
+            paintMonitorArtwork(screenCanvas, activeArtwork);
+            if (!monitorSlideshowStarted) {
+                monitorSlideshowStarted = true;
+                window.setInterval(() => {
+                    activeArtwork = (activeArtwork + 1) % portfolioArtworks.length;
+                    updateMonitorArtwork();
+                }, 5000);
+            }
+        }
 
         room.updateMatrixWorld(
             true
@@ -1693,6 +1830,26 @@ renderer.domElement.addEventListener(
                 currentObject.name
                     ? currentObject.name.toUpperCase()
                     : '';
+
+            if (objectName.includes('GUITAR')) {
+                openAnimation();
+                return;
+            }
+
+            if (objectName === 'PLANE.005' || objectName.includes('MONITOR')) {
+                openArtworkGallery(activeArtwork);
+                return;
+            }
+
+            if (objectName.includes('GITHUB')) {
+                window.open('https://github.com/dokiasi15-lgtm', '_blank', 'noopener,noreferrer');
+                return;
+            }
+
+            if (['INSTAGRAM', 'YOUTUBE', 'LINKEDIN', 'TIKTOK'].some((name) => objectName.includes(name))) {
+                openSocialLinks();
+                return;
+            }
 
             console.log(
                 'Objet touché :',
